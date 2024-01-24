@@ -23,9 +23,16 @@ function App() {
   return (
     <>
       <div className="card">
-        <button onClick={() => Rune.actions.playMove({ majorRow: 0, majorCol: 1, minorCol: 0, minorRow: 0, player: game.player })}>
-          count is {game.majorBoard[0][1]}
-          player is {game.player}
+        <button onClick={() => Rune.actions.playMove({ majorRow: 0, majorCol: 1, minorCol: 0, minorRow: 0, player: game.lastMovePlayerId  })}>
+          count is {console.log(game.majorBoard)}
+          <br>
+          </br>
+          player is {console.log('player', game.player)}
+          <br>
+          </br>
+          next minorBoard is {game.nextMinorBoard}
+          <br></br>
+          next player is {console.log('next player', game.nextPlayer)}
         </button>
       </div>
     </>
