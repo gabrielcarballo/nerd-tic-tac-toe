@@ -6,7 +6,7 @@ import { NextBoard } from "./types/NextBoard";
 
 
 export interface GameState {
-  majorBoard: MajorBoard;
+  majorBoardState: MajorBoard;
   nextMinorBoard: NextBoard | null;
   lastMovePlayerId: PlayerId | null;
   playerIds: PlayerId[],
@@ -24,13 +24,16 @@ Rune.initLogic({
   minPlayers: 2,
   maxPlayers: 2,
   setup: (allPlayerIds): GameState => {
-    const majorBoard = new MajorBoard();
-    return { majorBoard, nextMinorBoard: null, lastMovePlayerId: 'X', playerIds: allPlayerIds };
+    const majorBoardState = new MajorBoard();
+    return { majorBoardState, nextMinorBoard: null, lastMovePlayerId: 'X', playerIds: allPlayerIds };
   },
   actions: {
     claimCell: ({ majorRow, majorCol, minorRow, minorCol }, { game }) => {
-      game.majorBoard.majorBoard[majorRow][majorCol].playMove(minorRow, minorCol);
-      game.nextMinorBoard = game.majorBoard.nextBoard;
+      if (game.nextMinorBoard && (majorRow !== game.nextMinorBoard.row || majorCol !== game.nextMinorBoard.column)) {
+        throw Rune.invalidAction();
+      }
+      game.majorBoardState.majorBoard[majorRow][majorCol].playMove(minorRow, minorCol);
+      game.nextMinorBoard = game.majorBoardState.majorBoard[majorRow][majorCol].nextBoard;
     },
   },
 });
