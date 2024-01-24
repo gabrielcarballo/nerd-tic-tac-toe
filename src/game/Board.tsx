@@ -1,5 +1,6 @@
 import { BoardIndex, Player } from '../types/Cell';
 import { TicTacToe } from './TicTacToe';
+import { NextBoard } from '../types/NextBoard';
 
 
 export class Board extends TicTacToe {
@@ -8,7 +9,10 @@ export class Board extends TicTacToe {
     [null, null, null],
     [null, null, null],
   ];
-
+  nextBoard: NextBoard= {
+    row: null,
+    column: null,
+  };
   player1: Player = 0;
   player2: Player = 1;
   public currentPlayer = this.player1;
@@ -21,7 +25,7 @@ export class Board extends TicTacToe {
     ];
   }
 
-   switchPlayer() {
+  protected switchPlayer() {
     this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;
   }
 
@@ -29,15 +33,19 @@ export class Board extends TicTacToe {
     if (this.board[row][column] !== null) {
       throw Rune.invalidAction();
     }
-
+    this.nextBoard = {
+      row,
+      column,
+    }
     this.board[row][column] = this.currentPlayer;
-    if (this.checkWinner()) {
+    if (Rune.actions.checkWinner()) {
       return this.currentPlayer;
     }
+    
     this.switchPlayer();
   }
 
-  public checkWinner(): Player | null {
+  protected checkWinner(): Player | null {
     // check rows
     for (let i = 0; i < 3; i++) {
       if (this.board[i][0] === this.board[i][1] && this.board[i][1] === this.board[i][2]) {
@@ -62,4 +70,6 @@ export class Board extends TicTacToe {
 
     return null;
   }
+
+
 }
