@@ -2,7 +2,7 @@ import { BoardIndex, Player } from '../types/Cell';
 import { TicTacToe } from './TicTacToe';
 
 
-export abstract class Board extends TicTacToe {
+export class Board extends TicTacToe {
   board: (Player | null)[][] = [
     [null, null, null],
     [null, null, null],
@@ -31,7 +31,9 @@ export abstract class Board extends TicTacToe {
     }
 
     this.board[row][column] = this.currentPlayer;
-    this.checkWinner();
+    if (this.checkWinner()) {
+      return this.currentPlayer;
+    }
     this.switchPlayer();
   }
 
