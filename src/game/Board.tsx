@@ -38,28 +38,22 @@ export class Board extends TicTacToe {
   }
 
   protected checkWinner(): Player | null {
-    // check rows
     for (let i = 0; i < 3; i++) {
-      if (this.board[i][0] === this.board[i][1] && this.board[i][1] === this.board[i][2]) {
+      const rowWin = this.board[i][0] !== null && this.board[i][0] === this.board[i][1] && this.board[i][1] === this.board[i][2];
+      const columnWin = this.board[0][i] !== null && this.board[0][i] === this.board[1][i] && this.board[1][i] === this.board[2][i];
+  
+      if (rowWin || columnWin) {
         return this.currentPlayer;
       }
     }
-
-    // check columns
-    for (let i = 0; i < 3; i++) {
-      if (this.board[0][i] === this.board[1][i] && this.board[1][i] === this.board[2][i]) {
-        return this.currentPlayer;
-      }
-    }
-
-    // check diagonals
-    if (this.board[0][0] === this.board[1][1] && this.board[1][1] === this.board[2][2]) {
+  
+    const diagonalWin1 = this.board[0][0] !== null && this.board[0][0] === this.board[1][1] && this.board[1][1] === this.board[2][2];
+    const diagonalWin2 = this.board[0][2] !== null && this.board[0][2] === this.board[1][1] && this.board[1][1] === this.board[2][0];
+  
+    if (diagonalWin1 || diagonalWin2) {
       return this.currentPlayer;
     }
-    if (this.board[0][2] === this.board[1][1] && this.board[1][1] === this.board[2][0]) {
-      return this.currentPlayer;
-    }
-
+  
     return null;
   }
 
