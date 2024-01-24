@@ -12,5 +12,5 @@ export abstract class TicTacToe {
   protected abstract switchPlayer(): void;
   abstract playMove(row: BoardIndex, column: BoardIndex): void;
   protected abstract checkWinner(): Player | null;
-  
+  protected abstract claimCell(row: BoardIndex, column: BoardIndex): void;
 }

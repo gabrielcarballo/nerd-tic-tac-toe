@@ -9,7 +9,7 @@ export class Board extends TicTacToe {
     [null, null, null],
     [null, null, null],
   ];
-  nextBoard: NextBoard= {
+  nextBoard: NextBoard = {
     row: null,
     column: null,
   };
@@ -29,19 +29,11 @@ export class Board extends TicTacToe {
     this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1;
   }
 
-  public playMove(row: BoardIndex, column: BoardIndex) {
-    if (this.board[row][column] !== null) {
-      throw Rune.invalidAction();
-    }
-    this.nextBoard = {
-      row,
-      column,
-    }
-    this.board[row][column] = this.currentPlayer;
-    if (Rune.actions.checkWinner()) {
+  public playMove(row: BoardIndex, column: BoardIndex): Player | void {
+    this.claimCell(row, column);
+    if (this.checkWinner()) {
       return this.currentPlayer;
     }
-    
     this.switchPlayer();
   }
 
@@ -71,5 +63,14 @@ export class Board extends TicTacToe {
     return null;
   }
 
-
+  protected claimCell(row: BoardIndex, column: BoardIndex): void | Error {
+    if (this.board[row][column] !== null) {
+      throw Rune.invalidAction();
+    }
+    this.board[row][column] = this.currentPlayer;
+    this.nextBoard = {
+      row,
+      column,
+    };
+  }
 }

@@ -1,19 +1,19 @@
 import type { RuneClient, PlayerId } from "rune-games-sdk/multiplayer"
-import { Player } from './types/Cell'
+import { CellIndices } from './types/Cell';
 import { MajorBoard } from './game/MajorBoard'
+import { NextBoard } from "./types/NextBoard";
 
 
 
 export interface GameState {
   majorBoard: MajorBoard;
-  nextMinorBoard: [number, number] | null;
+  nextMinorBoard: NextBoard | null;
   lastMovePlayerId: PlayerId | null;
   playerIds: PlayerId[],
 }
 
 type GameActions = {
-  playMove: (params: { majorRow: number, majorCol: number, minorRow: number, minorCol: number }) => void
-  checkWinner: () => Player | null
+  claimCell: (params: CellIndices) => void
 }
 
 declare global {
@@ -28,15 +28,9 @@ Rune.initLogic({
     return { majorBoard, nextMinorBoard: null, lastMovePlayerId: 'X', playerIds: allPlayerIds };
   },
   actions: {
-    playMove: ({ majorRow, majorCol, minorRow, minorCol }, { game }) => {
-      game.majorBoard.majorBoard
+    claimCell: ({ majorRow, majorCol, minorRow, minorCol }, { game }) => {
+      game.majorBoard.majorBoard[majorRow][majorCol].playMove(minorRow, minorCol);
+      game.nextMinorBoard = game.majorBoard.nextBoard;
     },
-    checkWinner: () => {
-
-      // Implement your tic-tac-toe win checking logic here.
-      // If the minor game at majorBoard[majorRow][majorCol] is won, return 'X' or 'O'.
-      // Otherwise, return null.
-    },
-
   },
 });
