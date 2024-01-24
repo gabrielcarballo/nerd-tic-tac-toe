@@ -31,12 +31,15 @@ export class Board extends TicTacToe {
 
   public playMove(row: BoardIndex, column: BoardIndex): Player | void {
     this.claimCell(row, column);
+    this.switchPlayer();
     if (this.checkWinner()) {
       return this.currentPlayer;
     }
-    this.switchPlayer();
+    if (!this.isDraw()) {
+      return 
+    }
   }
-
+// Still have to figure out if returning the player is the best way to do this or if I should turn the board to X or O;
   protected checkWinner(): Player | null {
     for (let i = 0; i < 3; i++) {
       const rowWin = this.board[i][0] !== null && this.board[i][0] === this.board[i][1] && this.board[i][1] === this.board[i][2];
@@ -66,5 +69,9 @@ export class Board extends TicTacToe {
       row,
       column,
     };
+  }
+
+  public isDraw(): boolean {
+    return this.checkWinner() === null && this.board.every(row => row.every(cell => cell !== null));
   }
 }

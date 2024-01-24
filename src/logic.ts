@@ -29,11 +29,16 @@ Rune.initLogic({
   },
   actions: {
     claimCell: ({ majorRow, majorCol, minorRow, minorCol }, { game }) => {
-      if (game.nextMinorBoard && (majorRow !== game.nextMinorBoard.row || majorCol !== game.nextMinorBoard.column)) {
+      const board = game.majorBoardState.majorBoard[majorRow][majorCol];
+    if (game.nextMinorBoard && game.nextMinorBoard.row !== null && game.nextMinorBoard.column !== null) {
+      const nextBoard = game.majorBoardState.majorBoard[game.nextMinorBoard.row][game.nextMinorBoard.column];
+      if (!nextBoard.isDraw() && (majorRow !== game.nextMinorBoard.row || majorCol !== game.nextMinorBoard.column)) {
         throw Rune.invalidAction();
       }
-      game.majorBoardState.majorBoard[majorRow][majorCol].playMove(minorRow, minorCol);
-      game.nextMinorBoard = game.majorBoardState.majorBoard[majorRow][majorCol].nextBoard;
+    }
+      board.playMove(minorRow, minorCol);
+      game.nextMinorBoard = board.nextBoard;
     },
+
   },
 });
